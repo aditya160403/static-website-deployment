@@ -1,0 +1,24 @@
+---
+- name: Install Nginx
+  apt:
+    name: nginx
+    state: present
+  become: true
+
+- name: Copy custom index.html page
+  template:
+    src: index.html.j2
+    dest: /var/www/html/index.html
+  notify: Restart Nginx
+
+- name: Ensure Nginx is started and enabled
+  service:
+    name: nginx
+    state: started
+    enabled: true
+  become: true
+
+- name: Rollback Nginx if something goes wrong
+  fail:
+    msg: "Nginx service failed to restart. Rolling back!"
+  when: ansible_facts.packages.nginx is not defined

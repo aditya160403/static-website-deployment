@@ -1,0 +1,7 @@
+---
+- name: Deploy Static Website using Nginx
+  hosts: web_servers
+  become: yes
+
+  roles:
+    - nginx
